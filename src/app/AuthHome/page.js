@@ -2,13 +2,11 @@
 import { useState } from "react";
 import React from 'react';
 // import PasswordStrengthMeter from "./PasswordStreagth";
-import useCallApis from "./AuthHome/useCallApis";
+import useCallApis from "./useCallApis";
 import Link from "next/link";
 // import "./styles/Signup.css"
 // import { GoogleOAuthProvider } from "@react-oauth/google";
-import Box from '@mui/material/Box';
-import FormControl from '@mui/material/FormControl';
-import { TextField } from "@mui/material";
+
  const Page = ()=> {
 
   const [UserDetails, setUserDetails] = useState({
@@ -45,13 +43,8 @@ import { TextField } from "@mui/material";
   }
   return (
 
-      <div className="SignupMainBox" style={{width : '100%', height : '100vh',
-       overflow : "hidden", display : 'flex', justifyContent: "center", alignItems : 'center'}}>
-     <Box component="section" sx={{
-          width: 500,
-          height: 300,
-          borderRadius: 1,
-        }}>
+      <div className="SignupMainBox">
+        <div className="SignupForm">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
        
           <h2 className="" style={{padding : '10px 0'}}>
@@ -61,34 +54,45 @@ import { TextField } from "@mui/material";
 
         <div className="">
   
-        <FormControl variant="standard" style={{
-              width: "100%",
-              padding: "10px",
-              gap: "18px"
-        }}>
+   <div className="SignupInputs">
+   <input
+      icon={""}
+      type='text'
+      name='name'
+      placeholder="Full Name"
+      value={UserDetails.name}
+      onChange={handleChangeInput}
+     />
+     <input
+      icon={""}
+      type='email'
+      name='email'
+      placeholder="Email"
+      value={UserDetails.email}
+      onChange={handleChangeInput}
+     />
+     <input
+      icon={""}
+      type='password'
+      name='password'
+      placeholder="Password"
+      value={UserDetails.password}
+      onChange={handleChangeInput}
+     />
 
-<TextField id="filled-basic" type="text" name='name' label="Full Name" variant="filled" value={UserDetails.name}
-      onChange={handleChangeInput}/>
-<TextField id="filled-basic" type="email" name='email' label="email" variant="filled" value={UserDetails.email}
-      onChange={handleChangeInput}/>
-
-<TextField id="filled-basic" type="password" name='password' label="password" variant="filled" value={UserDetails.password}
-      onChange={handleChangeInput}/>
-
-
-   </FormControl>
+   </div>
      <div>
       {/* <PasswordStrengthMeter password={UserDetails.password}/> */}
            </div>
             <div>
               <p>Already have a account <Link href={"/signin"}>signIn</Link></p>
-            <button variant="text" onClick={submitForm}>{isloading ? 'loading' : 'SingUp'}</button>
+            <button variant="contained" onClick={submitForm}>{isloading ? 'loading' : 'SingUp'}</button>
             </div>
-            <button variant="text"onClick={()=>{
+              <button onClick={()=>{
                 window.open(`http://localhost:8000/auth/google`,"_self")
               }}>Signup with google</button>
         </div>
-        </Box>
+        </div>
       </div>
  
   )
