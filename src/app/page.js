@@ -2,13 +2,16 @@
 import { useState } from "react";
 import React from 'react';
 // import PasswordStrengthMeter from "./PasswordStreagth";
-import useCallApis from "./AuthHome/useCallApis";
+import useCallApis from "./hooks/useApiCalling";
 import Link from "next/link";
 // import "./styles/Signup.css"
 // import { GoogleOAuthProvider } from "@react-oauth/google";
 import Box from '@mui/material/Box';
 import FormControl from '@mui/material/FormControl';
 import { TextField } from "@mui/material";
+import PasswordStrengthMete from "./PasswordStrength";
+import Swal from 'sweetalert2'
+import CheckValidForm from "./hooks/CheckValidForm";
  const Page = ()=> {
 
   const [UserDetails, setUserDetails] = useState({
@@ -18,7 +21,7 @@ import { TextField } from "@mui/material";
   })
 
   const {data,isloading,callapi} = useCallApis()
-
+console.log({data})
   const handleChangeInput = (e)=>{
 
     const { name, value } = e.target;
@@ -30,19 +33,15 @@ import { TextField } from "@mui/material";
     }));
   }
 
-
   const submitForm = ()=>{
-    const getStrength = (pass) => {
-      let strength = 0;
-      if (pass.length >= 6) strength++;
-      if (pass.match(/[a-z]/) && pass.match(/[A-Z]/)) strength++;
-      if (pass.match(/\d/)) strength++;
-      if (pass.match(/[^a-zA-Z\d]/)) strength++;
-      return strength;
-    };
 
-    callapi(UserDetails,'signup')
+    const istrue =  CheckValidForm(UserDetails.name,UserDetails.email,UserDetails.password)
+    if(istrue){
+      callapi(UserDetails,'signup')
+    }
+    
   }
+
   return (
 
       <div className="SignupMainBox" style={{width : '100%', height : '100vh',
@@ -78,11 +77,25 @@ import { TextField } from "@mui/material";
 
    </FormControl>
      <div>
-      {/* <PasswordStrengthMeter password={UserDetails.password}/> */}
+     <p>Already have a account <Link href={"/signin"}>signIn</Link></p>
            </div>
+           <PasswordStrengthMete password={UserDetails.password}/>
             <div>
-              <p>Already have a account <Link href={"/signin"}>signIn</Link></p>
-            <button variant="text" onClick={submitForm}>{isloading ? 'loading' : 'SingUp'}</button>
+             
+
+            {(UserDetails.name && UserDetails.email && UserDetails.password) ?
+              <button variant="text" onClick={submitForm}>{isloading ? 'loading' : 'SingUp'}</button>
+            :
+            <button variant="text" onClick={()=>{
+              return Swal.fire({
+                title: 'Error!',
+                text: 'Please Fill all data',
+                icon: 'error',
+              })
+            }}>SingUp</button>
+            }
+
+
             </div>
             <button variant="text"onClick={()=>{
                 window.open(`http://localhost:8000/auth/google`,"_self")
